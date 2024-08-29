@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry Potter - Book Detail Page</title>
+  
+  <link rel="stylesheet" href="<%= process.env.URL%>/css/style.css" />
+  <link rel="stylesheet" href="<%= process.env.URL%>/css/book-filter.css" />
+  <!--- google font link-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <!-- Fontawesome Link for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+    
+<body>
+  <%- include("../partials/header") -%>
+
+    <div class="breadcrumb-container">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="http://localhost:8000/book/book-filter" style="color: #6c5dd4">Books</a></li>
+        <li><a href="#"><%= book.name%></a></li>
+        
+      </ul>
+    </div>
+
+    <section class="book-overview">
+      <div class="img">
+        <img src="<%= book.image %>" alt="" />
+      </div>
+      <div class="book-content">
+        <h4>
+          <%= book.name%>
+        </h4>
+
+        <div class="meta">
+          <div class="review">
+            <div class="rating">
+              <% for (let i=0; i < book.stars; i++) { %>
+                <i class="fa-solid fa-star"></i>
+                <% } %>
+                  <span>
+                    <%= book.stars%>.0
+                  </span>
+            </div>
+
+            <div class="comment-like">
+              <small><img src="../images/comment.png" alt="" /> <span>
+                  <%=book.ratings.length %> Reviews
+                </span></small>
+              <small><img src="../images/like.png" alt="" /> <span>456k Likes</span></small>
+            </div>
+          </div>
+          <div class="social-btn">
+            <a href=""><i class="fa-brands fa-facebook-f"></i>Facebook</a>
+            <a href=""><i class="fa-brands fa-twitter"></i>Twitter</a>
+            <a href=""><i class="fa-brands fa-whatsapp"></i>Whatsapp</a>
+            <a href=""><i class="fa-regular fa-envelope"></i>Email</a>
+          </div>
+        </div>
+        <p>
+          <%= book.description %>
+        </p>
+
+        <div class="footer">
+          <div class="author-detail">
+            <div class="author">
+              <small>Written by</small>
+              <strong>
+                <%= book.authorId.name %>
+              </strong>
+            </div>
+            <div class="publisher">
+              <small>Publisher</small>
+              <strong>Printarea Studios</strong>
+            </div>
+            <div class="year">
+              <small>Year</small>
+              <strong>2019</strong>
+            </div>
+          </div>
+          <div class="badge">
+            <span><i class="fa-solid fa-bolt-lightning"></i>free shipping</span>
+            <span><i class="fa-solid fa-shield"></i>in stocks</span>
+          </div>
+        </div>
+        <div class="book-price">
+          <div class="price">
+            <strong>$<%= (book.price).toFixed(2) %></strong>
+            <strike>$<%= (book.price*1.2).toFixed(2) %></strike>
+            <span><%= (((book.price * 1.2) - book.price) / (book.price * 1.2) * 100).toFixed(2) %>% off</span>
+
+          </div>
+          <div class="input-group">
+            <div class="offer-bottom">
+              <a href ="http://localhost:8000/user/addCart/<%= book._id %>" class="cartbtn">
+                <i class="fa-solid fa-cart-shopping"></i>Add to cart
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="book-info">
+      <div class="detail-customer">
+        <div class="tabbtns">
+          <button class="tablink" data-btn="detail">Details Product</button>
+          <button class="tablink" data-btn="customer">Customer Reviews</button>
+        </div>
+        <div class="book-detail tabcontent" id="detail">
+          <div class="detail-line">
+            <strong>Book Title</strong><span>
+              <%=book.name%>
+            </span>
+          </div>
+          <div class="detail-line">
+            <strong>Author</strong><span>
+              <%=book.authorId.name%>
+            </span>
+          </div>
+          <div class="detail-line">
+            <strong>ISBN</strong><span>121341381648(ISBN13: 121341381648)</span>
+          </div>
+          <div class="detail-line">
+            <strong>Edition Language</strong><span>English</span>
+          </div>
+          <div class="detail-line">
+            <strong>Book Format</strong><span>Paperback, 450 Pages</span>
+          </div>
+          <div class="detail-line">
+            <strong>Date Published</strong><span>August 10th 2019</span>
+          </div>
+          <div class="detail-line">
+            <strong>Publisher</strong><span>Webpress Inc.</span>
+          </div>
+          <div class="detail-line tag-line">
+            <strong>Tags</strong>
+            <div class="tags">
+              <span>Drama</span>
+              <span>Adventure</span>
+              <span>Survival</span>
+              <span>Biography</span>
+              <span>Bestseller</span>
+            </div>
+          </div>
+        </div>
+        <div class="customer-review tabcontent" id="customer">
+          <div class="rating">
+            <div class="rating-info">
+              <h5>Rating Information</h5>
+            </div>
+
+            <div class="star">
+              <small><span>
+                  <%= book.stars %>.0
+                </span>out of 5</small>
+              <div class="stars">
+                <% for (let i=0; i < book.stars; i++) { %>
+                  <i class="fa-solid fa-star"></i>
+                  <% } %>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="color: #6c5dd4;">Bình luận:</h2>
+          <% if (typeof error !=='undefined' && error) { %>
+            <div style="color: red;">
+              <%= error %>
+            </div>
+            <% } %>
+              <% if (typeof success !=='undefined' && success) { %>
+                <div style="color: green;">
+                  <%= success %>
+                </div>
+                <% } %>
+                  <form method="post" action="/rating/<%= book._id%>">
+                    
+                    <input style="min-height: 60px; min-width: 70%; margin-right: 20px;" type="text" id="content" name="content">
+              
+                    
+                    Đánh giá sao:<input style="height: 30px; width: 50px; margin-left: 10px;" type="number" id="stars" name="stars" min="1" max="5">
+                    <input style="height: 50px; width: 100px; margin-left: 20px;" type="submit" value="Submit">
+                  </form>
+
+                  <strong>Showing <%=book.ratings.length %> of <%=book.ratings.length %> reviews></strong>
+
+                  <% book.ratings.forEach(rating=> { %>
+                    <div class="reviewer-container">
+                      <div class="review">
+                        <div class="img-detail">
+                          <img src="../images/man1.png" alt=""> <!-- Bạn có thể thay đổi đường dẫn ảnh nếu cần -->
+                          <div class="name">
+                            <h5>
+                              <%= rating.userName %>
+                            </h5>
+                            <small>
+                              <%= new Date(rating.date).toLocaleDateString() %>
+                            </small> <!-- Bạn có thể thêm ngày tháng từ dữ liệu nếu có -->
+                          </div>
+                        </div>
+                        <div class="review-footer">
+                          <% rating.rating.forEach(r=> { %>
+                            <p>
+                              <%= r.content %>
+                            </p>
+                            <div class="rating-star">
+                              <% for (let i=0; i < r.stars; i++) { %>
+                                <i class="fa-solid fa-star"></i>
+                                <% } %>
+                                  <% for (let i=r.stars; i < 5; i++) { %>
+                                    <i class="fa-solid fa-star" style="color: #ccc;"></i>
+                                    <% } %>
+                                      <span>
+                                        <%= r.stars %>.0
+                                      </span>
+                            </div>
+                            <% }) %>
+                        </div>
+                      </div>
+                      <form method="post" action="/rating/<%= book._id %>/<%= rating._id %>" style="display:inline;">
+                        <button onclick="return confirm('Are you sure?')" type="submit"
+                          style="max-height: 30px; font-size: 10px;">Xóa</button>
+                      </form>
+                    </div>
+                    <% }) %>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="service">
+      <div class="service-container">
+        <div class="service-card">
+          <div class="icon">
+            <i class="fa-solid fa-bolt-lightning"></i>
+          </div>
+          <div class="service-content">
+            <h5>Quick Delivery</h5>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+              exercitationem.
+            </p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="icon">
+            <i class="fa-solid fa-shield"></i>
+          </div>
+          <div class="service-content">
+            <h5>Secure Payment</h5>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+              exercitationem.
+            </p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="icon">
+            <i class="fa-solid fa-thumbs-up"></i>
+          </div>
+          <div class="service-content">
+            <h5>Best Quality</h5>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+              exercitationem.
+            </p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="icon">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <div class="service-content">
+            <h5>Return Guarantee</h5>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+              exercitationem.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="subscription">
+      <div class="container">
+        <h4>Subscribe our newsletter for Latest <br> books updates</h4>
+        <div class="input">
+          <input type="text" placeholder="Type your email here">
+          <button>subscribe</button>
+        </div>
+      </div>
+      <div class="circle-1"></div>
+      <div class="circle-2"></div>
+    </section>
+
+    <%- include("../partials/footer") -%>
+
+      <%- include("../components/backToTop") -%>
+
+
+        <script>
+          const tabbtn = document.querySelectorAll(".tablink");
+          for (let i = 0; i < tabbtn.length; i++) {
+            tabbtn[i].addEventListener('click', () => {
+              let tabName = tabbtn[i].dataset.btn;
+              let tabContent = document.getElementById(tabName);
+              let AllTabContent = document.querySelectorAll(".tabcontent");
+              let tabbtns = document.querySelectorAll(".tablink");
+              for (let j = 0; j < AllTabContent.length; j++) {
+                AllTabContent[j].style.display = "none";
+              }
+              tabContent.style.display = "block";
+
+            })
+
+          }
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+          integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../js/repeat-js.js"></script>
+        <script src="../js/increment-decrement.js"></script>
+        
+</body>
+
+</html>

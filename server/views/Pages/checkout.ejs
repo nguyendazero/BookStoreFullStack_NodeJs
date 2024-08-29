@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookoe - Online Book Store</title>
+    <link rel="stylesheet" href="<%= process.env.URL%>/css/style.css" />
+    <link rel="stylesheet" href="<%= process.env.URL%>/css/book-filter.css" />
+    <!-- Fontawesome Link for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!--- google font link-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .checkout-form a {
+        background-color: #6c5dd4;
+        color: #fff;
+        padding: 12px 15px;
+        border: none;
+        width: 160px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    </style>
+</head>
+<body>
+    <%- include("../partials/header") -%>
+      <div class="breadcrumb-container">
+        <ul class="breadcrumb">
+          <li><a href="/" style="color: #6c5dd4">Shop</a></li>
+          <li><a href="#">Checkout</a></li>
+        </ul>
+      </div>
+      <%if(typeof message !== 'undefined'){%>
+        <script>
+          alert("<%=message%>")
+        </script>
+      <%}%>
+
+      <% if(user !== 'null'){
+        let orderSubTotal = 0;  
+      %>
+
+      <section class="checkout-section page">
+        <h2>Checkout</h2>
+        <div class="main">
+          <div class="checkout-form">
+            <h4>coupon order</h4>
+            <div class="form-container">
+              <form action="/coupon/checkCoupon" method="post">
+                <div class="input-field">
+                  <label for="">couponCode</label>
+                  <% if (typeof coupon !== 'undefined') { %>
+                    <input type="text" placeholder="please enter coupon" value="<%= coupon.discount %> %" name="code" readonly>
+                    <a href="/checkout">reset</a>
+                    <% } else { %>
+                    <input type="text" placeholder="please enter coupon" name="code">
+                    <button>coupon</button>
+                  <% } %>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="your-order">
+            <h4>Your Order</h4>
+            <div class="order-table">
+              <table cellspacing="0">
+                  <%
+                    user.cart.forEach((item,index)=>{
+                      orderSubTotal+= item.book.price * item.quantity
+                  %>
+                  <tr class="heading">
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Total</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img src="<%= item.book.image %>" alt="">
+                    </td>
+                    <td><%= item.book.name %></td>
+                    <td>$<%= item.book.price * item.quantity %></td>
+                  </tr>
+                <%})%>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="detail-payment">
+        <div class="summary-section">
+          <h4>Order Total</h4>
+          <div class="order-detail-table">
+            <form action="/order" method="post">
+              <table>
+                <tr>
+                  <td>Order Subtotal</td>
+                  <td>$<%=orderSubTotal%></td>
+                </tr>
+                <tr>
+                  <td>Order Subtotal</td>
+                  <td>
+                      <textarea rows="3" placeholder="Address" style="width: 100%" name="address" required></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Shipping</td>
+                  <td>Free Shipping</td>
+                </tr>
+                <tr>
+                  <td>Coupon</td>
+                  <% if (typeof coupon !== 'undefined') { 
+                    orderSubTotal =orderSubTotal - (orderSubTotal*coupon.discount)/100
+                    %>
+                    <td><input type="text" value="<%=coupon._id%>" name="coupon" hidden><%=coupon.discount%>%</td>
+                  <% } else { %>
+                    <td>0%</td>
+                  <% } %>
+                </tr>
+                <tr>
+                  <td>Total</td>
+                  <td><input type="text" value="<%=orderSubTotal%>" name="total" hidden>$<%=orderSubTotal%></td>
+                </tr>
+              </table>
+              <button>Place Order Now</button>
+            </form>
+          </div>
+        </div>
+        <%}%>
+        <!-- <div class="payment-section">
+          <h4>Payment Method</h4>
+          <div class="payment-form">
+            <div class="payment-option">
+              <select>
+                <option>Paytm</option>
+                <option>Credit Card</option>
+                <option>Debit Card</option>
+                <option>Cash On Delivery</option>
+              </select>
+            </div>
+            <div class="card-name">
+              <input type="text" placeholder="Card Holder Name">
+            </div>
+            <div class="card-no">
+              <input type="text" placeholder="Card Number">
+            </div>
+            <div class="card-meta">
+              <input type="text" placeholder="MM/YY" onfocus="(this.type='month')">
+              <input type="text" placeholder="CVV">
+              <input type="text" placeholder="Postal">
+            </div>
+            <button>Place Order Now</button>
+          </div>
+        </div> -->
+      </section>
+      <%- include("../partials/footer") -%>
+    <%- include("../components/backToTop") -%>
+
+</body>
+</html>
